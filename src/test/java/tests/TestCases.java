@@ -63,13 +63,16 @@ public class TestCases {
     @Test
     @Description("Создание клиента с заполненными полями")
     @Execution(ExecutionMode.CONCURRENT)
-    public void createCustomerTest(){
+    public void createCustomerTest() {
         mainPage.clickAddCustomer();                              // Клик по кнопке AddCustomers
         addCustPage.login(firstName,lastName,postCode);           // Создание пользователя
         Alert alert = driver.switchTo().alert();
-        String aler = alert.getText();                            // Текс алерта
+        String aler = alert.getText();                            // Текст алерта
         Assertions.assertEquals(aler,"Customer added successfully with customer id :6" , "Cообщение не соответствует ожидаемому");
-        alert.accept();
+        alert.accept();                                           // Закрытие алерта
+        mainPage.clickCustomers();                                // Клик по кнопке Customers
+        customers.writeSearchCustomer(firstName);                 // Ввод в поле "Severus"
+        customers.clickDeleteButton();                            // Удаление пользователя "Severus"
     }
 
 
@@ -111,6 +114,7 @@ public class TestCases {
         Assertions.assertEquals(javascriptExecutor.executeScript(executorString, addCustPage.getPostCode()), actualMessage, message);
     }
 
+
     @Test
     @Description("Открытие страницы Customers")
     @Execution(ExecutionMode.CONCURRENT)
@@ -124,7 +128,7 @@ public class TestCases {
     @Test
     @Description("Сортировка в алфавитном порядке")
     @Execution(ExecutionMode.CONCURRENT)
-    public void clickFirstNameTest(){
+    public void clickFirstNameTest() {
         mainPage.clickAddCustomer();                                   // Клик по кнопке AddCustomers
         addCustPage.login(firstName,lastName,postCode);                // Создание пользователя 1
         driver.switchTo().alert().accept();                            // Закрытие алерта
@@ -136,6 +140,11 @@ public class TestCases {
         String sortedText = customers.resultFirstName();               // Текст под кнопкой First Name
         String elementText = String.valueOf((sortedText.charAt(0)));   // Получение первого элемента из текста
         Assertions.assertEquals(elementText,"A","Сортировка НЕ в алфавитном порядке");
+        customers.writeSearchCustomer(firstName);                      // Ввод в поле "Severus"
+        customers.clickDeleteButton();                                 // Удаление пользователя "Severus"
+        customers.writeSearchCustomer(firstName2);                     // Ввод в поле "Altron"
+        customers.clickDeleteButton();                                 // Удаление пользователя "Altron"
+
     }
 
     @Test
@@ -148,7 +157,9 @@ public class TestCases {
         mainPage.clickCustomers();                               // Клик по кнопке Customers
         customers.writeSearchCustomer(firstName);                // Ввод в поле "Severus"
         String firstNameResult = customers.resultFirstName();    // Текст под кнопкой First Name
-        Assertions.assertEquals(firstNameResult,firstName,"First Name НЕ соответсвует ожидаемому"); // Проверка
+        Assertions.assertEquals(firstNameResult,firstName,"First Name НЕ соответсвует ожидаемому");
+        customers.clickDeleteButton();                           // Удаление пользователя после проверки
+
     }
 
     @Test
@@ -160,8 +171,10 @@ public class TestCases {
         driver.switchTo().alert().accept();                      // Закрытие алерта
         mainPage.clickCustomers();                               // Клик по кнопке Customers
         customers.writeSearchCustomer(lastName);                 // Ввод в поле "Snape"
-        String lastNameResult = customers.resultLasttName();     // Текст под кнопкой Last Name
+        String lastNameResult = customers.resultLastName();     // Текст под кнопкой Last Name
         Assertions.assertEquals(lastNameResult,lastName,"Last Name НЕ соответсвует ожидаемому");
+        customers.clickDeleteButton();                           // Удаление пользователя после проверки
+
     }
 
 
@@ -176,6 +189,7 @@ public class TestCases {
         customers.writeSearchCustomer(postCode);                 // Ввод в поле "E725JB"
         String postCodeResult = customers.resultPostCode();      // Текст под кнопкой Post Code
         Assertions.assertEquals(postCodeResult, postCode, "Post Code НЕ соответсвует ожидаемому");
+        customers.clickDeleteButton();                           // Удаление пользователя после проверки
     }
 
 

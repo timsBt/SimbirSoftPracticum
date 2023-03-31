@@ -30,6 +30,9 @@ public class Customers {
     @FindBy(xpath = "//td[@class=\"ng-binding\"][3]")
     private WebElement postCodeResult;
 
+    @FindBy(xpath = "//button[@ng-click=\"deleteCust(cust)\"]")
+    private WebElement deleteButton;
+
     public WebElement getFirstNameButton(){
         return firstNameButton;
     }
@@ -42,8 +45,14 @@ public class Customers {
         firstNameButton.click();
     }
 
+    @Step("Нажатие на кнопку Delete")
+    public void clickDeleteButton(){
+        deleteButton.click();
+    }
+
     @Step ("Ввод в поле Search Customer данных")
     public void writeSearchCustomer(String name){
+        searchCustomer.clear();
         searchCustomer.sendKeys(name);
     }
 
@@ -53,7 +62,7 @@ public class Customers {
     }
 
     @Step ("Получаем текст под кнопкой Last Name")
-    public String resultLasttName(){
+    public String resultLastName(){
         return lastNameResult.getText();
     }
 
