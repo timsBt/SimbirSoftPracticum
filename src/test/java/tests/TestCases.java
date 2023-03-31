@@ -23,7 +23,10 @@ public class TestCases {
 
     String firstName = "Severus";
     String lastName = "Snape";
-    String postCode = "AE9999";
+    String postCode = "SN9999";
+    String firstName2 = "Altron";
+    String lastName2 = "Marlovich";
+    String postCode2 = "AL1111";
 
     String actualMessage = "Заполните это поле.";
     String message = "Всплывающее сообщение Не соответсвует ожидаемому";
@@ -61,10 +64,10 @@ public class TestCases {
     @Description("Создание клиента с заполненными полями")
     @Execution(ExecutionMode.CONCURRENT)
     public void createCustomerTest(){
-        mainPage.clickAddCustomer();
-        addCustPage.login(firstName,lastName,postCode);
+        mainPage.clickAddCustomer();                              // Клик по кнопке AddCustomers
+        addCustPage.login(firstName,lastName,postCode);           // Создание пользователя
         Alert alert = driver.switchTo().alert();
-        String aler = alert.getText();
+        String aler = alert.getText();                            // Текс алерта
         Assertions.assertEquals(aler,"Customer added successfully with customer id :6" , "Cообщение не соответствует ожидаемому");
         alert.accept();
     }
@@ -122,7 +125,12 @@ public class TestCases {
     @Description("Сортировка в алфавитном порядке")
     @Execution(ExecutionMode.CONCURRENT)
     public void clickFirstNameTest(){
-        mainPage.clickCustomers();
+        mainPage.clickAddCustomer();                                   // Клик по кнопке AddCustomers
+        addCustPage.login(firstName,lastName,postCode);                // Создание пользователя 1
+        driver.switchTo().alert().accept();                            // Закрытие алерта
+        addCustPage.login(firstName2,lastName2,postCode2);             // Создание пользователя 2
+        driver.switchTo().alert().accept();                            // Закрытие алерта
+        mainPage.clickCustomers();                                     // Клик по кнопке Customers
         customers.clickFirstNameButton();                              // Клик по кнопке First Name
         customers.clickFirstNameButton();                              // Клик по кнопке First Name
         String sortedText = customers.resultFirstName();               // Текст под кнопкой First Name
@@ -134,20 +142,24 @@ public class TestCases {
     @Description ("Поиск клиента по First Name")
     @Execution(ExecutionMode.CONCURRENT)
     public void clickSearchFirstNameTest(){
-        String firstName = "Harry";
-        mainPage.clickCustomers();
-        customers.writeSearchCustomer(firstName);                // Ввод в поле "Harry"
+        mainPage.clickAddCustomer();                             // Клик по кнопке AddCustomers
+        addCustPage.login(firstName,lastName,postCode);          // Создание пользователя
+        driver.switchTo().alert().accept();                      // Закрытие алерта
+        mainPage.clickCustomers();                               // Клик по кнопке Customers
+        customers.writeSearchCustomer(firstName);                // Ввод в поле "Severus"
         String firstNameResult = customers.resultFirstName();    // Текст под кнопкой First Name
-        Assertions.assertEquals(firstNameResult,firstName,"First Name НЕ соответсвует ожидаемому");
+        Assertions.assertEquals(firstNameResult,firstName,"First Name НЕ соответсвует ожидаемому"); // Проверка
     }
 
     @Test
     @Description ("Поиск клиента по Last Name")
     @Execution(ExecutionMode.CONCURRENT)
     public void clickSearchLastNameTest(){
-        String lastName = "Potter";
-        mainPage.clickCustomers();
-        customers.writeSearchCustomer(lastName);                 // Ввод в поле "Potter"
+        mainPage.clickAddCustomer();                             // Клик по кнопке AddCustomers
+        addCustPage.login(firstName,lastName,postCode);          // Создание пользователя
+        driver.switchTo().alert().accept();                      // Закрытие алерта
+        mainPage.clickCustomers();                               // Клик по кнопке Customers
+        customers.writeSearchCustomer(lastName);                 // Ввод в поле "Snape"
         String lastNameResult = customers.resultLasttName();     // Текст под кнопкой Last Name
         Assertions.assertEquals(lastNameResult,lastName,"Last Name НЕ соответсвует ожидаемому");
     }
@@ -157,8 +169,10 @@ public class TestCases {
     @Description ("Поиск клиента по Post Code")
     @Execution(ExecutionMode.CONCURRENT)
     public void clickSearchPostCodeTest(){
-        String postCode = "E725JB";
-        mainPage.clickCustomers();
+        mainPage.clickAddCustomer();                             // Клик по кнопке AddCustomers
+        addCustPage.login(firstName,lastName,postCode);          // Создание пользователя
+        driver.switchTo().alert().accept();                      // Закрытие алерта
+        mainPage.clickCustomers();                               // Клик по кнопке Customers
         customers.writeSearchCustomer(postCode);                 // Ввод в поле "E725JB"
         String postCodeResult = customers.resultPostCode();      // Текст под кнопкой Post Code
         Assertions.assertEquals(postCodeResult, postCode, "Post Code НЕ соответсвует ожидаемому");
