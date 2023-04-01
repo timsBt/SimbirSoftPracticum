@@ -1,6 +1,7 @@
 package pages;
 
 import io.qameta.allure.Step;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,18 +24,29 @@ public class MainPage {
     @FindBy(xpath = "//button[@ng-click =  'showCust()']")
     private WebElement customers;
 
-    public WebElement getAddCustomer(){
-        return addCustomer;}
-
-    public WebElement getCustomers(){
-        return customers;}
-
+    public WebElement getAddCustomer() {
+        checkOpen(addCustomer);
+        return addCustomer;
+    }
+    public WebElement getCustomers() {
+        checkOpen(customers);
+        return customers;
+    }
 
     @Step("Нажатие кнопки Add Customer")
-    public void clickAddCustomer(){
-        addCustomer.click();}
+    public Customers clickAddCustomer(){
+        getAddCustomer().click();
+        return new Customers(driver);
+    }
 
     @Step("Нажатие кнопки Customers")
-    public void clickCustomers(){
-        customers.click();}
+    public Customers clickCustomers(){
+        getCustomers().click();
+        return new Customers(driver);
+    }
+
+    @Step("Проверка присутствия элемента на странице")
+    public void checkOpen(WebElement element){
+        Assertions.assertTrue(element.isDisplayed());
+    }
 }

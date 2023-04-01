@@ -7,11 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
 import pages.AddCustPage;
 import pages.Customers;
 import pages.MainPage;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.time.Duration;
+import java.util.Properties;
 
 public class TestCases {
 
@@ -19,19 +22,12 @@ public class TestCases {
     MainPage mainPage = new MainPage(driver);
     AddCustPage addCustPage = new AddCustPage(driver);
     Customers customers = new Customers(driver);
-    JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 
-    String firstName = "Severus";
-    String lastName = "Snape";
-    String postCode = "SN9999";
-    String firstName2 = "Altron";
-    String lastName2 = "Marlovich";
-    String postCode2 = "AL1111";
-
-    String actualMessage = "Заполните это поле.";
-    String message = "Всплывающее сообщение Не соответсвует ожидаемому";
-    String executorString = "return arguments[0].validationMessage";
-
+    public static String valueProperties (String param) throws Exception {
+        Properties props = new Properties();
+        props.load(new InputStreamReader(new FileInputStream("src/main/resources/aplication.properties"), "UTF-8"));
+        return props.getProperty(param);
+    }
 
     @BeforeEach
     public void SetUp() {
@@ -40,140 +36,120 @@ public class TestCases {
         driver.manage().window().maximize();
     }
 
-    @Test
-    @Description("Открытие главной страницы")
-    @Execution(ExecutionMode.CONCURRENT)
-    public void openMainPageTest(){
-        Assertions.assertTrue(mainPage.getAddCustomer().isDisplayed());
-        Assertions.assertTrue(mainPage.getCustomers().isDisplayed());
-    }
-
-    @Test
-    @Description("Открытие страницы Add Customer")
-    @Execution(ExecutionMode.CONCURRENT)
-    public void clickCustomerTest(){
-        mainPage.clickAddCustomer();
-        Assertions.assertTrue(addCustPage.getFirstName().isDisplayed());
-        Assertions.assertTrue(addCustPage.getLastName().isDisplayed());
-        Assertions.assertTrue(addCustPage.getPostCode().isDisplayed());
-        Assertions.assertTrue(addCustPage.getAddCustomerButton().isDisplayed());
-    }
-
 
     @Test
     @Description("Создание клиента с заполненными полями")
     @Execution(ExecutionMode.CONCURRENT)
-    public void createCustomerTest() {
+    public void createCustomerTest() throws Exception {
         mainPage.clickAddCustomer();                              // Клик по кнопке AddCustomers
-        addCustPage.login(firstName,lastName,postCode);           // Создание пользователя
-        Alert alert = driver.switchTo().alert();
-        String aler = alert.getText();                            // Текст алерта
-        Assertions.assertEquals(aler,"Customer added successfully with customer id :6" , "Cообщение не соответствует ожидаемому");
-        alert.accept();                                           // Закрытие алерта
+        addCustPage.login(valueProperties("firstName"),
+                valueProperties("lastName"),
+                valueProperties("postCode"));               // Создание пользователя,данные из файла Properties
+        Assertions.assertEquals(addCustPage.getTextAlert(),
+                valueProperties("actualAllert") ,
+                valueProperties("message"));
+        addCustPage.getCloseAlert();                              // Закрытие алерта
         mainPage.clickCustomers();                                // Клик по кнопке Customers
-        customers.writeSearchCustomer(firstName);                 // Ввод в поле "Severus"
-        customers.clickDeleteButton();                            // Удаление пользователя "Severus"
+        customers.writeSearchCustomer(valueProperties("firstName"))
+                 .clickDeleteButton();                            // Ввод в поле "Severus" и Удаление пользователя "Severus"
     }
-
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустыми полями")
     @Execution(ExecutionMode.CONCURRENT)
-    public void createCustomerEmptyFieldsTest(){
+    public void createCustomerEmptyFieldsTest() throws Exception {
         mainPage.clickAddCustomer();
         addCustPage.emptyField();
-        Assertions.assertEquals(javascriptExecutor.executeScript(executorString, addCustPage.getFirstName()), actualMessage, message);
+        Assertions.assertEquals(addCustPage.missingMessage(addCustPage.getFirstName()),
+                valueProperties("actualMessage"),valueProperties("message"));
     }
 
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустым полем First Name")
     @Execution(ExecutionMode.CONCURRENT)
-    public void createCustomerEmptyFirstNameTest(){
+    public void createCustomerEmptyFirstNameTest() throws Exception {
         mainPage.clickAddCustomer();
-        addCustPage.emptyFirstName(lastName,postCode);
-        Assertions.assertEquals(javascriptExecutor.executeScript(executorString, addCustPage.getFirstName()), actualMessage, message);
+        addCustPage.emptyFirstName(valueProperties("firstName"), valueProperties("postCode"));
+        Assertions.assertEquals(addCustPage.missingMessage(addCustPage.getFirstName()),
+                valueProperties("actualMessage"),valueProperties("message"));
     }
 
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустым полем Last Name")
     @Execution(ExecutionMode.CONCURRENT)
-    public void createCustomerEmptyLastNameTest(){
+    public void createCustomerEmptyLastNameTest() throws Exception {
         mainPage.clickAddCustomer();
-        addCustPage.emptyLastName(firstName,postCode);
-        Assertions.assertEquals(javascriptExecutor.executeScript(executorString, addCustPage.getLastName()), actualMessage, message);
+        addCustPage.emptyLastName(valueProperties("firstName"), valueProperties("postCode"));
+        Assertions.assertEquals(addCustPage.missingMessage(addCustPage.getLastName()),
+                valueProperties("actualMessage"),valueProperties("message"));
     }
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустым полем Post Code")
     @Execution(ExecutionMode.CONCURRENT)
-    public void createCustomerEmptyPostCodeTest(){
+    public void createCustomerEmptyPostCodeTest() throws Exception {
         mainPage.clickAddCustomer();
-        addCustPage.emptyPostCode(firstName,lastName);
-        Assertions.assertEquals(javascriptExecutor.executeScript(executorString, addCustPage.getPostCode()), actualMessage, message);
-    }
-
-
-    @Test
-    @Description("Открытие страницы Customers")
-    @Execution(ExecutionMode.CONCURRENT)
-    public void clickCustomersTest(){
-        mainPage.clickCustomers();
-        Assertions.assertTrue(customers.getFirstNameButton().isDisplayed());
-        Assertions.assertTrue(customers.getSearchCustomer().isDisplayed());
+        addCustPage.emptyPostCode(valueProperties("firstName"),valueProperties("lastName"));
+        Assertions.assertEquals(addCustPage.missingMessage(addCustPage.getPostCode()),
+                valueProperties("actualMessage"),valueProperties("message"));
     }
 
 
     @Test
     @Description("Сортировка в алфавитном порядке")
     @Execution(ExecutionMode.CONCURRENT)
-    public void clickFirstNameTest() {
+    public void clickFirstNameTest() throws Exception {
         mainPage.clickAddCustomer();                                   // Клик по кнопке AddCustomers
-        addCustPage.login(firstName,lastName,postCode);                // Создание пользователя 1
-        driver.switchTo().alert().accept();                            // Закрытие алерта
-        addCustPage.login(firstName2,lastName2,postCode2);             // Создание пользователя 2
-        driver.switchTo().alert().accept();                            // Закрытие алерта
+        addCustPage.login(valueProperties("firstName"),valueProperties("lastName"), valueProperties("postCode"))                 // Создание пользователя 1
+                   .getCloseAlert()                                    // Закрытие алерта
+                   .login(valueProperties("firstName2"),valueProperties("lastName2"), valueProperties("postCode2"))              // Создание пользователя 2
+                   .getCloseAlert();                                   // Закрытие алерта
         mainPage.clickCustomers();                                     // Клик по кнопке Customers
-        customers.clickFirstNameButton();                              // Клик по кнопке First Name
-        customers.clickFirstNameButton();                              // Клик по кнопке First Name
+        customers.clickFirstNameButton()                               // Клик по кнопке First Name
+                 .clickFirstNameButton();                              // Клик по кнопке First Name
         String sortedText = customers.resultFirstName();               // Текст под кнопкой First Name
         String elementText = String.valueOf((sortedText.charAt(0)));   // Получение первого элемента из текста
-        Assertions.assertEquals(elementText,"A","Сортировка НЕ в алфавитном порядке");
-        customers.writeSearchCustomer(firstName);                      // Ввод в поле "Severus"
-        customers.clickDeleteButton();                                 // Удаление пользователя "Severus"
-        customers.writeSearchCustomer(firstName2);                     // Ввод в поле "Altron"
-        customers.clickDeleteButton();                                 // Удаление пользователя "Altron"
+        Assertions.assertEquals(elementText,"A",valueProperties("messageNoSort"));
+        customers.writeSearchCustomer(valueProperties("firstName"))                       // Ввод в поле "Severus"
+                 .clickDeleteButton()                                                           // Удаление пользователя "Severus"
+                 .writeSearchCustomer(valueProperties("firstName2"))                      // Ввод в поле "Altron"
+                 .clickDeleteButton();                                                          // Удаление пользователя "Altron"
 
     }
 
     @Test
     @Description ("Поиск клиента по First Name")
     @Execution(ExecutionMode.CONCURRENT)
-    public void clickSearchFirstNameTest(){
-        mainPage.clickAddCustomer();                             // Клик по кнопке AddCustomers
-        addCustPage.login(firstName,lastName,postCode);          // Создание пользователя
-        driver.switchTo().alert().accept();                      // Закрытие алерта
-        mainPage.clickCustomers();                               // Клик по кнопке Customers
-        customers.writeSearchCustomer(firstName);                // Ввод в поле "Severus"
-        String firstNameResult = customers.resultFirstName();    // Текст под кнопкой First Name
-        Assertions.assertEquals(firstNameResult,firstName,"First Name НЕ соответсвует ожидаемому");
-        customers.clickDeleteButton();                           // Удаление пользователя после проверки
+    public void clickSearchFirstNameTest() throws Exception {
+        mainPage.clickAddCustomer();                                                        // Клик по кнопке AddCustomers
+        addCustPage.login(valueProperties("firstName"),
+                valueProperties("lastName"),
+                valueProperties("postCode"))                                         // Создание пользователя
+                   .getCloseAlert();                                                       // Закрытие алерта
+        mainPage.clickCustomers();                                                         // Клик по кнопке Customers
+        customers.writeSearchCustomer(valueProperties("firstName"));                 // Ввод в поле "Severus"
+        String firstNameResult = customers.resultFirstName();                              // Текст под кнопкой First Name
+        Assertions.assertEquals(firstNameResult,valueProperties("firstName"),valueProperties("message"));
+        customers.clickDeleteButton();                                                     // Удаление пользователя после проверки
 
     }
 
     @Test
     @Description ("Поиск клиента по Last Name")
     @Execution(ExecutionMode.CONCURRENT)
-    public void clickSearchLastNameTest(){
-        mainPage.clickAddCustomer();                             // Клик по кнопке AddCustomers
-        addCustPage.login(firstName,lastName,postCode);          // Создание пользователя
-        driver.switchTo().alert().accept();                      // Закрытие алерта
-        mainPage.clickCustomers();                               // Клик по кнопке Customers
-        customers.writeSearchCustomer(lastName);                 // Ввод в поле "Snape"
-        String lastNameResult = customers.resultLastName();     // Текст под кнопкой Last Name
-        Assertions.assertEquals(lastNameResult,lastName,"Last Name НЕ соответсвует ожидаемому");
-        customers.clickDeleteButton();                           // Удаление пользователя после проверки
+    public void clickSearchLastNameTest() throws Exception {
+        mainPage.clickAddCustomer();                                                        // Клик по кнопке AddCustomers
+        addCustPage.login(valueProperties("firstName"),
+                valueProperties("lastName"),
+                valueProperties("postCode"))                                          // Создание пользователя
+                   .getCloseAlert();                                                        // Закрытие алерта
+        mainPage.clickCustomers();                                                         // Клик по кнопке Customers
+        customers.writeSearchCustomer(valueProperties("lastName"));                 // Ввод в поле "Snape"
+        String lastNameResult = customers.resultLastName();                               // Текст под кнопкой Last Name
+        Assertions.assertEquals(lastNameResult,valueProperties("lastName"),valueProperties("message"));
+        customers.clickDeleteButton();                                                    // Удаление пользователя после проверки
 
     }
 
@@ -181,15 +157,17 @@ public class TestCases {
     @Test
     @Description ("Поиск клиента по Post Code")
     @Execution(ExecutionMode.CONCURRENT)
-    public void clickSearchPostCodeTest(){
-        mainPage.clickAddCustomer();                             // Клик по кнопке AddCustomers
-        addCustPage.login(firstName,lastName,postCode);          // Создание пользователя
-        driver.switchTo().alert().accept();                      // Закрытие алерта
-        mainPage.clickCustomers();                               // Клик по кнопке Customers
-        customers.writeSearchCustomer(postCode);                 // Ввод в поле "E725JB"
-        String postCodeResult = customers.resultPostCode();      // Текст под кнопкой Post Code
-        Assertions.assertEquals(postCodeResult, postCode, "Post Code НЕ соответсвует ожидаемому");
-        customers.clickDeleteButton();                           // Удаление пользователя после проверки
+    public void clickSearchPostCodeTest() throws Exception {
+        mainPage.clickAddCustomer();                                                         // Клик по кнопке AddCustomers
+        addCustPage.login(valueProperties("firstName"),
+                valueProperties("lastName"),
+                valueProperties("postCode"))                                          // Создание пользователя
+                   .getCloseAlert();                                                        // Закрытие алерта
+        mainPage.clickCustomers();                                                          // Клик по кнопке Customers
+        customers.writeSearchCustomer( valueProperties("postCode"));                 // Ввод в поле "E725JB"
+        String postCodeResult = customers.resultPostCode();                                // Текст под кнопкой Post Code
+        Assertions.assertEquals(postCodeResult,  valueProperties("postCode"), valueProperties("message"));
+        customers.clickDeleteButton();                                                     // Удаление пользователя после проверки
     }
 
 

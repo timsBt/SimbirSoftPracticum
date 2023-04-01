@@ -1,6 +1,7 @@
 package pages;
 
 import io.qameta.allure.Step;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -34,26 +35,35 @@ public class Customers {
     private WebElement deleteButton;
 
     public WebElement getFirstNameButton(){
+        checkOpen(firstNameButton);
         return firstNameButton;
     }
     public WebElement getSearchCustomer(){
+        checkOpen(searchCustomer);
         return searchCustomer;
+    }
+    public WebElement getClickDeleleButton(){
+        checkOpen(deleteButton);
+        return deleteButton;
     }
 
     @Step("Нажатие на кнопку First Name")
-    public void clickFirstNameButton(){
-        firstNameButton.click();
+    public Customers clickFirstNameButton(){
+        getFirstNameButton().click();
+        return this;
     }
 
     @Step("Нажатие на кнопку Delete")
-    public void clickDeleteButton(){
-        deleteButton.click();
+    public Customers clickDeleteButton(){
+        getClickDeleleButton().click();
+        return this;
     }
 
     @Step ("Ввод в поле Search Customer данных")
-    public void writeSearchCustomer(String name){
-        searchCustomer.clear();
-        searchCustomer.sendKeys(name);
+    public Customers writeSearchCustomer(String name){
+        getSearchCustomer().clear();
+        getSearchCustomer().sendKeys(name);
+        return this;
     }
 
     @Step ("Получаем текст под кнопкой First Name")
@@ -69,6 +79,11 @@ public class Customers {
     @Step ("Получаем текст под кнопкой Post Code")
     public String resultPostCode(){
         return postCodeResult.getText();
+    }
+
+    @Step("Проверка присутствия элемента на странице")
+    public void checkOpen(WebElement element){
+        Assertions.assertTrue(element.isDisplayed());
     }
 
 }
