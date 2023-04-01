@@ -11,10 +11,8 @@ import org.openqa.selenium.WebDriver;
 import pages.AddCustPage;
 import pages.Customers;
 import pages.MainPage;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.time.Duration;
-import java.util.Properties;
+import static utils.ValueProperties.valueProperties;
 
 public class TestCases {
 
@@ -23,11 +21,6 @@ public class TestCases {
     AddCustPage addCustPage = new AddCustPage(driver);
     Customers customers = new Customers(driver);
 
-    public static String valueProperties (String param) throws Exception {
-        Properties props = new Properties();
-        props.load(new InputStreamReader(new FileInputStream("src/main/resources/aplication.properties"), "UTF-8"));
-        return props.getProperty(param);
-    }
 
     @BeforeEach
     public void SetUp() {
