@@ -5,8 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openqa.selenium.WebDriver;
 import pages.AddCustPage;
 import pages.Customers;
@@ -32,7 +30,6 @@ public class TestCases {
 
     @Test
     @Description("Создание клиента с заполненными полями")
-    @Execution(ExecutionMode.CONCURRENT)
     public void createCustomerTest() throws Exception {
         mainPage.clickAddCustomer();                              // Клик по кнопке AddCustomers
         addCustPage.login(valueProperties("firstName"),
@@ -49,7 +46,6 @@ public class TestCases {
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустыми полями")
-    @Execution(ExecutionMode.CONCURRENT)
     public void createCustomerEmptyFieldsTest() throws Exception {
         mainPage.clickAddCustomer();
         addCustPage.emptyField();
@@ -60,7 +56,6 @@ public class TestCases {
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустым полем First Name")
-    @Execution(ExecutionMode.CONCURRENT)
     public void createCustomerEmptyFirstNameTest() throws Exception {
         mainPage.clickAddCustomer();
         addCustPage.emptyFirstName(valueProperties("firstName"), valueProperties("postCode"));
@@ -71,7 +66,6 @@ public class TestCases {
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустым полем Last Name")
-    @Execution(ExecutionMode.CONCURRENT)
     public void createCustomerEmptyLastNameTest() throws Exception {
         mainPage.clickAddCustomer();
         addCustPage.emptyLastName(valueProperties("firstName"), valueProperties("postCode"));
@@ -81,7 +75,6 @@ public class TestCases {
 
     @Test
     @Description("Проверка Всплывающей ошибки при Создании клиента с пустым полем Post Code")
-    @Execution(ExecutionMode.CONCURRENT)
     public void createCustomerEmptyPostCodeTest() throws Exception {
         mainPage.clickAddCustomer();
         addCustPage.emptyPostCode(valueProperties("firstName"),valueProperties("lastName"));
@@ -92,7 +85,6 @@ public class TestCases {
 
     @Test
     @Description("Сортировка в алфавитном порядке")
-    @Execution(ExecutionMode.CONCURRENT)
     public void clickFirstNameTest() throws Exception {
         mainPage.clickAddCustomer();                                   // Клик по кнопке AddCustomers
         addCustPage.login(valueProperties("firstName"),valueProperties("lastName"), valueProperties("postCode"))                 // Создание пользователя 1
@@ -114,7 +106,6 @@ public class TestCases {
 
     @Test
     @Description ("Поиск клиента по First Name")
-    @Execution(ExecutionMode.CONCURRENT)
     public void clickSearchFirstNameTest() throws Exception {
         mainPage.clickAddCustomer();                                                        // Клик по кнопке AddCustomers
         addCustPage.login(valueProperties("firstName"),
@@ -131,7 +122,6 @@ public class TestCases {
 
     @Test
     @Description ("Поиск клиента по Last Name")
-    @Execution(ExecutionMode.CONCURRENT)
     public void clickSearchLastNameTest() throws Exception {
         mainPage.clickAddCustomer();                                                        // Клик по кнопке AddCustomers
         addCustPage.login(valueProperties("firstName"),
@@ -149,7 +139,6 @@ public class TestCases {
 
     @Test
     @Description ("Поиск клиента по Post Code")
-    @Execution(ExecutionMode.CONCURRENT)
     public void clickSearchPostCodeTest() throws Exception {
         mainPage.clickAddCustomer();                                                         // Клик по кнопке AddCustomers
         addCustPage.login(valueProperties("firstName"),
