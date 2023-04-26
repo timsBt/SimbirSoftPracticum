@@ -12,3 +12,4 @@ public class ValueProperties {
         return props.getProperty(param);
     }
 }
+

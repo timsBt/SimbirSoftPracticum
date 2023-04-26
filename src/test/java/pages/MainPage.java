@@ -50,3 +50,4 @@ public class MainPage {
         Assertions.assertTrue(element.isDisplayed());
     }
 }
+
