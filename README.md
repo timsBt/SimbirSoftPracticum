@@ -4,7 +4,6 @@
 - tests - ТЕСТЫ
 - utils - Инициализация драйвера
 - pom.xml - Конфигурация сборщика Maven
-- webdrivers - вебдрайвер для браузеров
 - TestCaseSimbirSoft.xml - тест кейсы
 
 # Тесты
