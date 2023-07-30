@@ -18,7 +18,7 @@
              	   ])
            	        }
                   }
-  stage('Buifghghfghfld') {
+  stage('delete') {
            post {
                 always {
                   bat 'docker-compose down --remove-orphans'
