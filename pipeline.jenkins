@@ -7,7 +7,7 @@
             }
         }
  }
- post{
+ post {
        allure([
          	  includeProperties: false,
               jdk: '',
