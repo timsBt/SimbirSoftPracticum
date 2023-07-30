@@ -9,13 +9,13 @@ pipeline {
       parallel {
         stage('docker-compose up') {
           steps {
-            sh 'docker-compose up'
+            bat 'docker-compose up'
           }
         }
         stage('test') {
           steps {
-            sh 'sleep 10'
-            sh 'docker-compose down --remove-orphans'
+            bat 'sleep 10'
+            bat 'docker-compose down --remove-orphans'
           }
         }
       }
@@ -24,7 +24,7 @@ pipeline {
 
   post { 
     always {
-      sh 'docker-compose down --remove-orphans'
+      bat 'docker-compose down --remove-orphans'
     }
   }
 }
