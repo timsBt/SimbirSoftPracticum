@@ -5,11 +5,10 @@
         steps {
       	  bat 'docker-compose -f docker-compose.yml up'
             }
-              post {
-                always {
+              steps {
                   bat 'docker stop selenoid-uiDDDD selenoidDDDD'
                 }
-              }
+
         }
               stage('Reports') {
                  steps {
