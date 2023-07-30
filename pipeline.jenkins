@@ -9,7 +9,7 @@
  }
  post{
      always{
-     bat 'docker-compose stop'
+     bat 'docker stop selenoid-uiDDDD selenoidDDDD'
             allure([
                	   includeProperties: false,
                	   jdk: '',
