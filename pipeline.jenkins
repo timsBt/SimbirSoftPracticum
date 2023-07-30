@@ -9,6 +9,7 @@
  }
  post{
      always{
+     bat 'docker-compose stop'
             allure([
                	   includeProperties: false,
                	   jdk: '',
