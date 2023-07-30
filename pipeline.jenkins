@@ -4,6 +4,7 @@
       stage('Build') {
         steps {
       	  bat 'docker-compose -f docker-compose.yml up'
+      	  bat 'docker compose stop'
             }
         }
               stage('Reports') {
@@ -17,11 +18,7 @@
              	   ])
            	        }
                   }
-      stage('exit') {
-        steps {
-      	  bat 'docker compose stop'
-            }
-        }
+
 
  }
  }
