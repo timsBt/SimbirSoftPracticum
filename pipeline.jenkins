@@ -7,7 +7,7 @@
             }
               post {
                 always {
-                  bat 'docker-compose -f docker-compose.yml stop'
+                  bat 'docker stop selenoid-uiDDDD selenoidDDDD'
                 }
               }
         }
