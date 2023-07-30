@@ -1,25 +1,27 @@
-pipeline {
-  agent any
-  options {
-    parallelsAlwaysFailFast()  // https://stackoverflow.com/q/54698697/4480139
-  }
-  stages {
-
-    stage('Parallel') {
-      parallel {
-        stage('docker-compose up') {
-          steps {
-            bat 'docker-compose -f docker-compose.yml up'
-          }
+ pipeline {
+    agent any
+ stages {
+      stage('Build') {
+        steps {
+      	  bat 'docker-compose -f docker-compose.yml up --abort-on-container-exit'
+            }
         }
-
-      }
-    }
-  }
-
-  post { 
+              stage('Reports') {
+                 steps {
+                    allure([
+               	   includeProperties: false,
+               	   jdk: '',
+               	   properties: [],
+               	   reportBuildPolicy: 'ALWAYS',
+               	   results: [[path: 'target/allure-results']]
+             	   ])
+           	        }
+                  }
+post {
     always {
       bat 'docker-compose down --remove-orphans'
     }
   }
-}
+
+ }
+ }
