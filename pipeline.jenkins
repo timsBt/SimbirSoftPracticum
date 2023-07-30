@@ -5,6 +5,11 @@
         steps {
       	  bat 'docker-compose -f docker-compose.yml up --abort-on-container-exit'
             }
+                post {
+                always {
+                  bat 'docker-compose down --remove-orphans'
+                }
+              }
         }
               stage('Reports') {
                  steps {
@@ -17,11 +22,7 @@
              	   ])
            	        }
                   }
-       post {
-    always {
-      bat 'docker-compose down --remove-orphans'
-    }
-  }
+
 
  }
  }
