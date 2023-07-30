@@ -19,7 +19,7 @@
                   }
       stage('exit') {
         steps {
-      	  bat 'docker-compose --abort-on-container-exit'
+      	  bat '--abort-on-container-exit'
             }
         }
 
