@@ -3,7 +3,7 @@
  stages {
       stage('Build') {
         steps {
-      	  bat 'docker-compose -f docker-compose.yml up --abort-on-container-exit'
+      	  bat 'docker-compose -f docker-compose.yml up stop'
             }
         }
               stage('Reports') {
