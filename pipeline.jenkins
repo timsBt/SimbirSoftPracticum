@@ -1,12 +1,17 @@
  pipeline {
     agent any
  stages {
-      stage('Build') {
+      stage('run') {
         steps {
       	  bat 'docker-compose -f docker-compose.yml up'
-       	  bat 'docker stop selenoid-uiDDDD selenoidDDDD'
                     }
                 }
+           stage('remove') {
+             steps {
+               bat 'docker-compose down --remove-orphans'
+             }
+           }
+
               stage('Reports') {
                  steps {
                     allure([
