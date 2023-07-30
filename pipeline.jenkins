@@ -5,12 +5,12 @@
         steps {
       	  bat 'docker-compose -f docker-compose.yml up'
             }
-        }
-              stage('exit') {
-                steps {
-              	  bat 'docker compose down'
-                    }
+              post {
+                always {
+                  bat 'docker compose stop'
                 }
+              }
+        }
               stage('Reports') {
                  steps {
                     allure([
