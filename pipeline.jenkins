@@ -12,12 +12,7 @@ pipeline {
             bat 'docker-compose -f docker-compose.yml up'
           }
         }
-        stage('test') {
-          steps {
-            bat 'sleep 10'
-            bat 'docker-compose down --remove-orphans'
-          }
-        }
+
       }
     }
   }
