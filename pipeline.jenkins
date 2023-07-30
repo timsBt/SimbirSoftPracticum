@@ -7,7 +7,17 @@
             }
 
         }
-              stage('Reports') {
+
+  stage('delete') {
+  steps {
+           post {
+                always {
+                  bat 'docker-compose down --remove-orphans'
+                }
+              }
+        }
+}
+ stage('Reports') {
                  steps {
                     allure([
                	   includeProperties: false,
@@ -18,14 +28,6 @@
              	   ])
            	        }
                   }
-  stage('delete') {
-  steps {
-           post {
-                always {
-                  bat 'docker-compose down --remove-orphans'
-                }
-              }
-        }
-}
+
  }
  }
