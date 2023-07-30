@@ -9,7 +9,7 @@ pipeline {
       parallel {
         stage('docker-compose up') {
           steps {
-            bat 'docker-compose up'
+            bat 'docker-compose -f docker-compose.yml up'
           }
         }
         stage('test') {
