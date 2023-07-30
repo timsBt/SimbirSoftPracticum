@@ -4,11 +4,7 @@
       stage('Build') {
         steps {
       	  bat 'docker-compose -f docker-compose.yml up'
-            }
-        }
-              stage('exit') {
-                steps {
-              	  bat 'docker stop selenoid-uiDDDD selenoidDDDD'
+       	  bat 'docker stop selenoid-uiDDDD selenoidDDDD'
                     }
                 }
               stage('Reports') {
