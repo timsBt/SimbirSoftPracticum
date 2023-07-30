@@ -1,0 +1,13 @@
+node {
+  stage('Test') {
+    //... test execution steps
+  }
+  stage('Build report'){
+    allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
+  }
+  stage('Send Summary'){
+    emailext body: '''${SCRIPT, template="allure-report.groovy"}''',
+            subject: "[Jenkins] Test Execution Summary",
+            to: "tims.bt@bk.ru"
+  }
+}
