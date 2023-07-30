@@ -1,11 +1,10 @@
  pipeline {
     agent any
-
-
  stages {
       stage('Build') {
         steps {
       	  bat 'docker-compose -f docker-compose.yml up --abort-on-container-exit'
+            }
         }
  }
  post {
@@ -19,5 +18,4 @@
              	   ])
      }
   }
- }
  }
