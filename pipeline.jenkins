@@ -1,29 +1,20 @@
  pipeline {
-    agent any
- stages {
-
-
-                 docker {
-                     image 'voyant/maven-openjdk16:latest'
-                     args '-v $HOME/.m2:/root/.m2'
-                 }
-
+ 	agent any
+      stages {
+  stage('Run tests') {
+          steps {
+             catchError {
+                script {
+         	docker run -p 8081:8080 -v
+            /var/run/docker.sock:/var/run/docker.sock voyant/maven-openjdk16:latest
+         }
+       }
+       }
+       }
       stage('Build') {
         steps {
-          bat 'docker-compose -f docker-compose.yml up'
+      	  bat 'docker-compose -f docker-compose.yml up --abort-on-container-exit'
             }
         }
- }
- post{
-     always{
-     bat 'docker stop selenoid-uiDDDD selenoidDDDD'
-            allure([
-               	   includeProperties: false,
-               	   jdk: '',
-               	   properties: [],
-               	   reportBuildPolicy: 'ALWAYS',
-               	   results: [[path: 'target/allure-results']]
-             	   ])
      }
-  }
- }
+   }
