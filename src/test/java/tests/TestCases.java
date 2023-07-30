@@ -32,7 +32,7 @@ public class TestCases {
 
     @Test
     @Description("Создание клиента с заполненными полями")
-    public void createCustomerTest() throws Exception {
+    public void createCustomerssssssssssssTest() throws Exception {
         mainPage.clickAddCustomer();                              // Клик по кнопке AddCustomers
         addCustPage.login(valueProperties("firstName"),
                 valueProperties("lastName"),
