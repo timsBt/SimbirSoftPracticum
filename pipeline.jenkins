@@ -3,6 +3,7 @@
  stages {
       stage('Build') {
         steps {
+          bat 'docker-compose -f docker-compose.yml build'
       	  bat 'docker-compose -f docker-compose.yml up'
             }
         }
