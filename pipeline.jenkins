@@ -5,7 +5,7 @@
           steps {
              catchError {
                 script {
-         	docker run -p 8081:8080 -v
+         	docker run -p 8080:8080 -v
             /var/run/docker.sock:/var/run/docker.sock voyant/maven-openjdk16:latest
          }
        }
