@@ -1,10 +1,16 @@
  pipeline {
     agent any
  stages {
+
+   agent {
+                 docker {
+                     image 'voyant/maven-openjdk16:latest'
+                     args '-v $HOME/.m2:/root/.m2'
+                 }
+             }
       stage('Build') {
         steps {
-          bat 'docker-compose -f docker-compose.yml build'
-      	  bat 'docker-compose -f docker-compose.yml up'
+          bat 'docker-compose -f docker-compose.yml up'
             }
         }
  }
