@@ -1,0 +1,14 @@
+{
+	"chrome": {
+		"default": "114",
+		"versions": {
+			"114.0": {
+				"port": "4444",
+				"image": "selenoid/vnc_chrome:114.0",
+				"tmpfs": {
+					"/tmp":"size=512m"
+				}
+			}
+		}
+	}
+}
