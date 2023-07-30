@@ -5,11 +5,14 @@
         steps {
       	  bat 'docker-compose -f docker-compose.yml up'
             }
-              steps {
-                  bat 'docker stop selenoid-uiDDDD selenoidDDDD'
-                }
+       }
 
-        }
+    stage('Build') {
+        steps {
+      	 bat 'docker stop selenoid-uiDDDD selenoidDDDD'
+            }
+       }
+
               stage('Reports') {
                  steps {
                     allure([
@@ -21,7 +24,6 @@
              	   ])
            	        }
                   }
-
 
  }
  }
