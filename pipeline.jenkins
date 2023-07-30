@@ -19,7 +19,7 @@
                   }
       stage('exit') {
         steps {
-      	  bat 'docker-compose stop'
+      	  bat 'docker compose stop'
             }
         }
 
