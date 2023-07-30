@@ -3,31 +3,19 @@
  stages {
       stage('Build') {
         steps {
-      	  bat 'docker-compose -f docker-compose.yml up'
+      	  bat 'docker-compose -f docker-compose.yml up --abort-on-container-exit'
             }
 
         }
 
-  stage('delete') {
-  steps {
-           post {
-                always {
-                  bat 'docker-compose down --remove-orphans'
-                }
-              }
-        }
-}
- stage('Reports') {
-                 steps {
-                    allure([
-               	   includeProperties: false,
-               	   jdk: '',
-               	   properties: [],
-               	   reportBuildPolicy: 'ALWAYS',
-               	   results: [[path: 'target/allure-results']]
-             	   ])
-           	        }
-                  }
 
  }
+
+         post{
+  always{
+  allure includeProperties:false,
+  jdk:'',
+  results:[[path:'target/allure-results']]
+  }
+  }
  }
