@@ -7,7 +7,7 @@
             }
               post {
                 always {
-                  bat 'docker compose stop'
+                  bat 'docker-compose -f docker-compose.yml stop'
                 }
               }
         }
