@@ -1,20 +1,19 @@
  pipeline {
- 	agent any
-      stages {
-  stage('Run tests') {
-          steps {
-             catchError {
-                script {
-         	docker run -p 8080:8080 -v
-            /var/run/docker.sock:/var/run/docker.sock voyant/maven-openjdk16:latest
-         }
-       }
-       }
-       }
+    agent any
+ stages {
       stage('Build') {
         steps {
       	  bat 'docker-compose -f docker-compose.yml up --abort-on-container-exit'
             }
         }
-     }
-   }
+ }
+ post{
+       allure([
+         	  includeProperties: false,
+              jdk: '',
+              properties: [],
+              reportBuildPolicy: 'ALWAYS',
+              results: [[path: 'target/allure-results']]
+             ])
+  }
+ }
