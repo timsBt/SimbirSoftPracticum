@@ -1,13 +1,21 @@
-node {
-  stage('Test') {
-    //... test execution steps
-  }
-  stage('Build report'){
-    allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
-  }
-  stage('Send Summary'){
-    emailext body: '''${SCRIPT, template="allure-report.groovy"}''',
-            subject: "[Jenkins] Test Execution Summary",
-            to: "tims.bt@bk.ru"
-  }
-}
+ pipeline {
+    agent any
+ stages {
+      stage('Build') {
+        steps {
+      	  bat 'docker-compose -f docker-compose.yml up'
+      	     }
+      	   }
+      stage('Reports') {
+         steps {
+            allure([
+       	   includeProperties: false,
+       	   jdk: '',
+       	   properties: [],
+       	   reportBuildPolicy: 'ALWAYS',
+       	   results: [[path: 'report']]
+     	   ])
+   	        }
+          }
+      	}
+      	  }
