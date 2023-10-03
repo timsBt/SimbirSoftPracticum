@@ -4,18 +4,18 @@
       stage('Build') {
         steps {
       	  bat 'mvn clean test'
-      	     }
-      	   }
-      stage('Reports') {
-         steps {
+            }
+        }
+ }
+ post {
+     always {
             allure([
-       	   includeProperties: false,
-       	   jdk: '',
-       	   properties: [],
-       	   reportBuildPolicy: 'ALWAYS',
-       	   results: [[path: 'target/allure-results']]
-     	   ])
-   	        }
-          }
-      	}
-      	  }
+               	   includeProperties: false,
+               	   jdk: '',
+               	   properties: [],
+               	   reportBuildPolicy: 'ALWAYS',
+               	   results: [[path: 'target/allure-results']]
+             	   ])
+     }
+  }
+ }
